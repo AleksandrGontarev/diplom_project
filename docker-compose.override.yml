@@ -8,39 +8,26 @@ services:
     volumes:
       - db_shop_volume:/var/lib/postgresql/data
     networks:
-      - shop_db_network
-    expose:
-      - 5432
-    restart: on-failure
-    environment:
-      POSTGRES_USER: 'postgres'
-      POSTGRES_PASSWORD: 'postgres'
-      POSTGRES_DB: 'shop'
-
-  db:
-    container_name: db
-    image: postgis/postgis:12-master
-    restart: on-failure
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    networks:
       - webnet
     expose:
       - 5432
-    env_file: ./config/.env
+    restart: on-failure
+    env_file: docker/shop/.env.django_secrets_shop
     environment:
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: 'postgres'
-      POSTGRES_DB: 'dev_db'
+      POSTGRES_DB: 'dev_db_shop'
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "postgres" ]
       interval: 10s
       timeout: 5s
       retries: 5
 
+
+
   web: &web
     container_name: web
-    env_file: ./config/.env
+    env_file: docker/shop/.env.django_secrets_shop
     build:
       target: development_build
       args:
@@ -50,10 +37,10 @@ services:
       - ./config:/config
     environment:
       DJANGO_DEBUG: 1
-      DATABASE_URL: 'postgresql://postgres:postgres@db:5432/dev_db'
-      DATABASE_HOST: 'db'
+      DATABASE_URL: 'postgresql://postgres:postgres@db:5432/dev_db_shop'
+      DATABASE_HOST: 'db_shop'
     depends_on:
-      - db
+      - db_shop
     command: sh /runserver.sh
 
   celery:
@@ -61,8 +48,8 @@ services:
     container_name: celery
     environment:
       C_FORCE_ROOT: 'true'
-      DATABASE_URL: 'postgresql://postgres:postgres@db:5432/dev_db'
-      DATABASE_HOST: 'db'
+      DATABASE_URL: 'postgresql://postgres:postgres@db:5432/dev_db_shop'
+      DATABASE_HOST: 'db_shop'
       DATABASE_PORT: '5432'
       REDIS_URL: 'redis://redis:6379/0'
       REDIS_CACHE: 'redis:6379'
@@ -72,5 +59,29 @@ services:
       WEB_PORT: '8000'
     depends_on:
       - redis
-      - db
+      - db_shop
     command: celery -A core worker -B -l INFO
+
+#  db:
+#    container_name: db
+#    image: postgis/postgis:12-master
+#    restart: on-failure
+#    volumes:
+#      - db-data:/var/lib/postgresql/data
+#    networks:
+#      - webnet
+#    expose:
+#      - 5432
+#    env_file: ./config/.env
+#    environment:
+#      POSTGRES_USER: 'postgres'
+#      POSTGRES_PASSWORD: 'postgres'
+#      POSTGRES_DB: 'dev_db'
+#    healthcheck:
+#      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+
+volumes:
+  db_shop_volume:
