@@ -1,0 +1,102 @@
+version: "3.8"
+
+services:
+  shop:
+    container_name: shop
+    build:
+      context: .
+      dockerfile: ./docker/shop/Dockerfile
+    volumes:
+      - ./shop:/app
+    networks:
+      - shop_db_network
+    env_file:
+      - docker/shop/.env.django_secrets_shop
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db_shop
+    environment:
+      DB_NAME: "shop"
+      DB_USER: "postgres"
+      DB_PASSWORD: "postgres"
+      DB_HOST: "db_shop"
+      DB_PORT: "5432"
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://0.0.0.0:8000/admin/login/"]
+      interval: 1m
+      timeout: 5s
+      retries: 2
+
+  warehouse:
+    container_name: warehouse
+    build:
+      context: .
+      dockerfile: ./docker/warehouse/Dockerfile
+    volumes:
+      - ./warehouse:/app
+    networks:
+      - warehouse_db_network
+    env_file:
+      - docker/warehouse/.env.django_secrets_warehouse
+    ports:
+      - "8001:8000"
+    depends_on:
+      - db_warehouse
+    environment:
+      DB_NAME: "warehouse"
+      DB_USER: "postgres"
+      DB_PASSWORD: "postgres"
+      DB_HOST: "db_warehouse"
+      DB_PORT: "5432"
+    restart: on-failure
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://0.0.0.0:8000/admin/login/" ]
+      interval: 1m
+      timeout: 5s
+      retries: 2
+
+  db_shop:
+    container_name: db_shop
+    image:
+      postgres:14-alpine
+    volumes:
+      - db_shop_volume:/var/lib/postgresql/data
+    networks:
+      - shop_db_network
+    expose:
+      - 5432
+    restart: on-failure
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'shop'
+
+
+  db_warehouse:
+    container_name: db_warehouse
+    image:
+      postgres:14-alpine
+    volumes:
+      - db_warehouse_volume:/var/lib/postgresql/data
+    networks:
+      - warehouse_db_network
+    expose:
+      - 5432
+    restart: on-failure
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'warehouse'
+
+
+networks:
+  shop_db_network:
+  warehouse_db_network:
+volumes:
+  db_shop_volume:
+  db_warehouse_volume:
+
+
+
