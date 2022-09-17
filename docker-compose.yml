@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.3"
 
 services:
   shop:
@@ -11,7 +11,7 @@ services:
     networks:
       - shop_db_network
     env_file:
-      - docker/shop/.env.django_secrets_shop
+      - docker/shop/.env.config
     ports:
       - "8000:8000"
     depends_on:
