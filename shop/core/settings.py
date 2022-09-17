@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost']
 
-# AUTH_USER_MODEL = "books.CustomUser"
+AUTH_USER_MODEL = "users.User"
 
 # Application definition
 
@@ -40,9 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'books',
+    # 'books_all',
     'orders',
     'users',
+    'books',
 ]
 
 MIDDLEWARE = [

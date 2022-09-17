@@ -1,7 +1,8 @@
-from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.urls import reverse
 
-# from django.contrib.auth.models import AbstractUser
-#
-#
-# class CustomUser(AbstractUser):
-#     pass
+
+class User(AbstractUser):
+
+    def get_absolute_url(self):
+        return reverse('authors-detail', args=[str(self.pk)])

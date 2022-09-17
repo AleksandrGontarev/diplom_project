@@ -1,8 +1,10 @@
 from django.db import models
+from users.models import User
+from books.models import Book
 
 
 class Order(models.Model):
-    # user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     ORDER_STATUS = (
         ('c', 'Cart'),
@@ -17,6 +19,6 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order_id = models.ForeignKey(Order, on_delete=models.CASCADE)
-    # book_id = models.ForeignKey(Book, on_delete=models.CASCADE)
+    book_id = models.ForeignKey(Book, on_delete=models.CASCADE, null=True)
     quantity = models.IntegerField()
 

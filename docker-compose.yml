@@ -11,7 +11,7 @@ services:
     networks:
       - shop_db_network
     env_file:
-      - docker/shop/.env.config
+      - docker/shop/.env.django_secrets_shop
     ports:
       - "8000:8000"
     depends_on:
@@ -97,6 +97,8 @@ networks:
 volumes:
   db_shop_volume:
   db_warehouse_volume:
+
+
 
 
 
