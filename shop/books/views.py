@@ -1,6 +1,31 @@
-from django.shortcuts import render, HttpResponse
+from django.views.generic import ListView, DetailView
+from books.models import Author, Genre, Book
 
 
-def homepage(request):
-    return HttpResponse('Hello !!!')
-# Create your views here.
+class AuthorsListView(ListView):
+    model = Author
+    paginate_by = 10
+    template_name = 'books/author_list.html'
+    # queryset = Author.objects.prefetch_related('book_set')
+
+
+class AuthorDetailView(DetailView):
+    model = Author
+
+
+class BookListview(ListView):
+    model = Book
+    paginate_by = 10
+    template_name = 'books/book_list.html'
+    # queryset = Book.objects.select_related('genre')
+
+
+class BookDetailView(DetailView):
+    model = Book
+
+
+
+
+
+
+

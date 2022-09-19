@@ -1,3 +1,10 @@
+#!/usr/bin/env sh
+
+set -o errexit
+set -o nounset
+
+cmd="$*"
+
 postgres_ready () {
   # Check that postgres is up:
   sh '/wait-for-command.sh' -t 5 -s 0 52 -c "curl db_warehouse:5432"

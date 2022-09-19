@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.3"
 
 services:
   shop:
@@ -97,6 +97,8 @@ networks:
 volumes:
   db_shop_volume:
   db_warehouse_volume:
+
+
 
 
 
