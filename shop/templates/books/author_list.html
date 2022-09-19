@@ -4,7 +4,7 @@
 <ul>
     {% for author in object_list %}
         <li>
-            <a href="{% url 'author-detail' author.pk%}"> <p>{{ author.title }}</p></a>
+            <a href="{% url 'author-detail' author.pk%}"> <p>{{ author.first_name }}</p></a>
         </li>
     {% endfor %}
 </ul>
