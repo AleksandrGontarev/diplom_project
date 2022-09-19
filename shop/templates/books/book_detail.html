@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
             <h3>{{ book.title }}</h3>
-            <p>author: {{ book.author}}</p>
+
             <p>genre: {{ book.genre }}</p>
             <p>price: {{ book.price }}</p>
             <p>quantity: {{ book.quantity }}</p>
             <p>id_in_store: {{ book.id_in_store }}</p>
-{#           {% for author in page_obj %}#}
-{#                        <ul>#}
-{#                            <li>#}
-{#                                <a href="{{ author.get_absolute_url }}">{{ author }}</a>#}
-{#                            </li>#}
-{#                        </ul>#}
-{#                    {% endfor %}#}
+            <p>author:</p>
+           {% for author in book.author.all %}
+                        <ul>
+                            <li>
+                                <a href="{{ author.get_absolute_url }}">{{ author }}</a>
+                            </li>
+                        </ul>
+                    {% endfor %}
 {% endblock %}

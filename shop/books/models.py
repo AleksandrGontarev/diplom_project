@@ -9,7 +9,7 @@ class Author(models.Model):
     date_of_death = models.DateField('Died', null=True, blank=True)
 
     def __str__(self):
-        return '%s, %s' % (self.last_name, self.first_name)
+        return self.first_name
 
 
 class Genre(models.Model):
@@ -25,7 +25,7 @@ class Book(models.Model):
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     quantity = models.IntegerField()
-    id_in_store = models.UUIDField(default=uuid.uuid4, #primary_key=True,
+    id_in_store = models.UUIDField(default=uuid.uuid4, primary_key=True,
                                    help_text="The unique identifier for this particular book in the warehouse and shop")
 
     def __str__(self):

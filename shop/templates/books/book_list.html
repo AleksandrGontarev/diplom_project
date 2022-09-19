@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Books:</h1>
+<h1>Books:{{ object_list.count }}</h1>
     <ul>
         {% for book in object_list %}
             <li>
