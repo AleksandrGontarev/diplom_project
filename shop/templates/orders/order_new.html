@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Order</h1>
+    <form action="" method="post">{% csrf_token %}
+      {{ form.as_p }}
+        <table class="table">
+            {{ orderitem.management_form }}
+
+            {% for form in orderitem.forms %}
+                {% if forloop.first %}
+                    <thead>
+                    <tr>
+                        {% for field in form.visible_fields %}
+                            <th>{{ field.label|capfirst }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                {% endif %}
+                    {% for field in form.visible_fields %}
+                        <td>
+                            {% if forloop.first %}
+                                {% for hidden in form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+                            {% endif %}
+                            {{ field.errors.as_ul }}
+                            {{ field }}
+                        </td>
+                    {% endfor %}
+            {% endfor %}
+        </table>
+        <input type="submit" value="Save"/> <a href="{% url 'order_list' %}">back to the list</a>
+    </form>
+
+{% endblock content %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+            <p>{{ order.pk }}</p>
+            <p>{{ order.user_id }}</p>
+            <p>status: {{ order.status }}</p>
+            <p>address: {{ order.delivery_address }}</p>
+{#           {% for author in book.author.all %}#}
+{#                        <ul>#}
+{#                            <li>#}
+{#                                <a href="{{ author.get_absolute_url }}">{{ author }}</a>#}
+{#                            </li>#}
+{#                        </ul>#}
+{#                    {% endfor %}#}
+{% endblock %}
