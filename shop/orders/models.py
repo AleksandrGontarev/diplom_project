@@ -18,7 +18,7 @@ class Order(models.Model):
     delivery_address = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.pk
+        return str(self.pk)
 
     def get_absolute_url(self):
         return reverse('order-detail', args=[str(self.pk)])
@@ -28,4 +28,7 @@ class OrderItem(models.Model):
     order_id = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE, null=True)
     quantity = models.IntegerField()
+
+    def __str__(self):
+        return str(self.pk)
 

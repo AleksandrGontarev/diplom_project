@@ -17,7 +17,7 @@ class Book(models.Model):
                                 help_text="The unique identifier for this particular book in the warehouse and shop")
     title = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=6, decimal_places=2)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='books')
 
     def __str__(self):
         return self.title
@@ -27,7 +27,7 @@ class BookItem(models.Model):
     isbn = models.CharField('ISBN', max_length=13, unique=True,
                             help_text='13 Character <a href="https://www.isbn-international.org/content/what-isbn'
                                       '">ISBN number</a>')
-    book_id = models.ForeignKey(Book, on_delete=models.CASCADE)
+    book_id = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='bookitem')
     row = models.IntegerField()
     shelf = models.CharField(max_length=5)
     history = models.BooleanField()

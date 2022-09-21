@@ -53,7 +53,7 @@ class OrderOrderItemCreate(LoginRequiredMixin, CreateView):
         context = self.get_context_data()
         orderitem = context['orderitem']
         with transaction.atomic():
-            self.object = form.save()
+            self.object = form.save(commit=False)
 
             if orderitem.is_valid():
                 orderitem.instance = self.object

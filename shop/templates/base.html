@@ -65,7 +65,8 @@
         {% if user.is_staff %}
           <hr/>
           <ul class="sidebar-nav">
-            <li>Staff</li>
+          <li><a href="{% url 'home' %}">Home</a></li>
+{#            <li>Staff</li>#}
             {% if perms.catalog.can_mark_returned %}
 {#              <li><a href="{% url 'all-borrowed' %}">All borrowed</a></li>#}
             {% endif %}
@@ -77,6 +78,7 @@
     <div class="col-sm-10 ">
 {#    <div>{% block br_cr %}<a href="{% url 'index' %}">Home</a>{% endblock %}</div>#}
 {#    <div>{% block br_cr %}<a href="{% url 'home' %}">Home</a>{% endblock %}</div>#}
+
       {% block content %}{% endblock %}
 
       {% block pagination %}

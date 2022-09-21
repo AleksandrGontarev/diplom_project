@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'orders',
     'users',
     'books',
+    'cart',
 ]
 
 MIDDLEWARE = [
@@ -134,3 +135,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SESSION_COOKIE_SECURE = True
+
+# session settings
+CART_SESSION_ID = 'cart'
