@@ -1,3 +1,40 @@
-from django.shortcuts import render
+from books.models import Book, BookItem, Author
+from books.serializers import BookSerializer, BookItemSerializer, AuthorSerializer
+from books.serializers import UserSerializer
+# from books.models import User
+# from books.permissions import IsOwnerOrReadOnly
+from rest_framework import viewsets
 
-# Create your views here.
+from rest_framework import permissions
+
+
+class AuthorViewSet(viewsets.ModelViewSet):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [permissions.IsAuthenticated]
+                          # ,IsOwnerOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+
+class BookItemViewSet(viewsets.ModelViewSet):
+    queryset = BookItem.objects.all()
+    serializer_class = BookItemSerializer
+    permission_classes = [permissions.IsAuthenticated]
+                          # ,IsOwnerOrReadOnly]
+
+    # def perform_create(self, serializer):
+    #     serializer.save(author=self.request.user)
+
+
+# class UserViewSet(viewsets.ReadOnlyModelViewSet):
+#
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
