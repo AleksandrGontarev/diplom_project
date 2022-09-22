@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>Cart</h1>
+    <hr>
+
+
+        {% for orderitem in orderitem_list %}
+
+            <div class="card" style="width: 30%;">
+
+{#                <img src="{{ orderitem.book_id.cover.url }}" class="w-25" alt="Book image">#}
+
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Order# {{ orderitem.order_id.pk }}</li>
+                        <li class="list-group-item">Book title: {{ orderitem.book_id}}</li>
+                        <li class="list-group-item">Delivery address: {{ orderitem.order_id.delivery_address}}</li>
+                        <li class="list-group-item">User: {{ orderitem.order_id.user_id }}</li>
+                        <li class="list-group-item">Email: {{ user.user_id.email }}</li>
+                        <li class="list-group-item">Price: {{ orderitem.book_id.price }}</li>
+
+                    </ul>
+                    <br>
+                    <div class="input-group p-1">
+                        <span class="input-group-text" id="basic-addon1">Quantity: </span>
+                        <input type="text" class="form-control" placeholder={{orderitem.quantity}} aria-label="Quantity" aria-describedby="basic-addon1">
+                    </div>
+                    <li class="list-group-item">Total Price: </li>
+                </div>
+            </div>
+            <br>
+
+        {% endfor %}
+
+        <a href="{% url 'home' %}" class="btn btn-primary" role="button">Back</a>
+        <a href="#" class="btn btn-success" role="button">OK</a>
+
+{%  endblock %}

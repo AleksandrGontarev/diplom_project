@@ -1,7 +1,11 @@
 from django.conf import settings
+from books.models import Book, BookItem
+from django.shortcuts import get_object_or_404
 
 
 class Cart(object):
+    product = get_object_or_404(Book, id=id, available=True)
+
     def __init__(self, request):
         """
         Initialize the cart.
@@ -13,7 +17,7 @@ class Cart(object):
             cart = self.session[settings.CART_SESSION_ID] = {}
         self.cart = cart
 
-    def add(self, book, quantity=1, update_quantity=False):
+    def add(self, product, quantity=1, update_quantity=False):
         """
         Add a product to the cart or update its quantity.
         """
@@ -31,3 +35,30 @@ class Cart(object):
         self.session[settings.CART_SESSION_ID] = self.cart
         # mark the session as "modified" to make sure it is saved
         self.session.modified = True
+
+    def remove(self, product):
+        """
+        Remove a product from the cart
+        :param product:
+        :return:
+        """
+        product_id = str(product.id)
+        if product_id in self.cart:
+            del self.cart[product_id]
+            self.save()
+
+        def __iter__(self):
+            """
+            Iterate over the items in the cart and get the products
+            from the database.
+            """
+            product_ids = self.cart.keys()
+            # get the product objects and add them to the cart
+            products = Book.objects.filter(id__in=product_ids)
+            for product in products:
+                self.cart[str(product.id)]['product'] = product
+
+            for item in self.cart.values():
+                item['price'] = Decimal(item['price'])
+                item['total_price'] = item['price'] * item['quantity']
+                yield item
