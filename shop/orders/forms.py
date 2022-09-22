@@ -1,6 +1,7 @@
 from django import forms
 from orders import models
 from django.forms.models import inlineformset_factory
+from books.models import Book
 
 
 class OrderItemForm(forms.ModelForm):

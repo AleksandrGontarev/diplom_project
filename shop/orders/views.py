@@ -1,4 +1,4 @@
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, View
 from orders.models import Order, OrderItem
 from django.shortcuts import render, redirect
 from users.models import User
@@ -23,18 +23,6 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
     template_name = 'orders/order_detail.html'
 
 
-# class OrderCreateView(LoginRequiredMixin, CreateView):
-#     model = Order
-#     fields = ['status', 'delivery_address', 'user_id']
-#     template_name = 'orders/order_new.html'
-#
-#     def form_valid(self, form):
-#         self.object = form.save(commit=False)
-#         self.object.user_id = self.request.user
-#         self.object.save()
-#         return super(OrderCreateView, self).form_valid(form)
-
-
 class OrderOrderItemCreate(LoginRequiredMixin, CreateView):
     model = Order
     fields = ['delivery_address']
@@ -53,7 +41,7 @@ class OrderOrderItemCreate(LoginRequiredMixin, CreateView):
         context = self.get_context_data()
         orderitem = context['orderitem']
         with transaction.atomic():
-            self.object = form.save(commit=False)
+            self.object = form.save()
 
             if orderitem.is_valid():
                 orderitem.instance = self.object
@@ -63,4 +51,36 @@ class OrderOrderItemCreate(LoginRequiredMixin, CreateView):
 
 class OrderItemDetailView(LoginRequiredMixin, DetailView):
     model = OrderItem
+
+
+class OrderView(View):
+    model = Order
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = Order.objects.filter(status='cart').select_related("user_id")
+        return queryset
+
+
+class CartListView(ListView):
+    model = OrderItem
+    paginate_by = 5
+    template_name = 'orders/cart.html'
+
+    def get_queryset(self):
+        queryset = OrderItem.objects.select_related("book_id", "order_id")
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        user = Order.objects.select_related("user_id").get(id=1)
+        status = user.status
+        context = super().get_context_data(**kwargs)
+
+        context["user"] = user
+        context["status"] = status
+
+        return context
+
+
+
 

@@ -1,11 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1>Books:{{ object_list.count }}</h1>
-    <ul>
-        {% for book in object_list %}
-            <li>
-                <a href="{% url 'book-detail' book.pk%}"> <p>{{ book.title }}</p></a>
-            </li>
+
+  {% for book in object_list %}
+
+            <div class="card" style="width: 30%;">
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><a href="{% url 'book-detail' book.pk%}"> <p>{{ book.title }}</p></a></li>
+                        <li class="list-group-item">Author: {{ book.author.first_name}}</li>
+                        <li class="list-group-item">Price: {{ book.price }}</li>
+                    </ul>
+                </div>
+            </div>
         {% endfor %}
-    </ul>
+
+
+
+
 {% endblock %}
