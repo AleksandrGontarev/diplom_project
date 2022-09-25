@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% block content %}
     <h1>Order</h1>
     <form action="" method="post">{% csrf_token %}
@@ -30,6 +29,6 @@
                     {% endfor %}
             {% endfor %}
         </table>
-        <input type="submit" value="Save"/> <a href="{% url 'order_list' %}">back to the list</a>
+        <input type="submit" value="Save"/> <a href="{% url 'cart' %}">back to the list</a>
     </form>
    {% endblock content %}

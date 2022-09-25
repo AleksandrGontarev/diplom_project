@@ -1,14 +1,22 @@
 {% extends 'base.html' %}
 {% block content %}
-            <p>{{ order.pk }}</p>
-            <p>{{ order.user_id }}</p>
-            <p>status: {{ order.status }}</p>
-            <p>address: {{ order.delivery_address }}</p>
-{#           {% for author in book.author.all %}#}
-{#                        <ul>#}
-{#                            <li>#}
-{#                                <a href="{{ author.get_absolute_url }}">{{ author }}</a>#}
-{#                            </li>#}
-{#                        </ul>#}
-{#                    {% endfor %}#}
+    <div class="card" style="width: 25rem;">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item active">order: {{ order.pk }}</li>
+            <li class="list-group-item">user name:{{ order.user_id }}</li>
+            <li class="list-group-item">status: {{ order.status }}</li>
+            <li class="list-group-item">address: {{ order.delivery_address }}
+                  <a href="{% url 'orderupdate' order.pk %}" class="btn btn-success" role="button"/>Update</a>
+            </li>
+
+           {% for orderitem in order.orders111.all %}
+               <ul>
+                   <a href="{% url 'orderitem_detail' orderitem.pk%}" />orderitem: {{ orderitem.pk}}</a>
+               </ul>
+           {% endfor %}
+        </ul>
+    <a href="{% url 'orderconfirm' order.pk%}" class="btn btn-warning" role="button"/>Confirm</a>
+    </div>
+    <a href="{% url 'order_list' %}" class="btn btn-success" role="button"/>Back</a>
+
 {% endblock %}

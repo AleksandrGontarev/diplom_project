@@ -45,15 +45,13 @@
 
           <li><a href="{% url 'book-list' %}">Books</a></li>
           <li><a href="{% url 'author-list' %}">Authors</a></li>
-            <li><a href="{% url 'order_new' %}">New Order</a></li>
-            <li><a href="{% url 'order_list' %}">Orders</a></li>
-            <li><a href="{% url 'cart' %}">Cart</a></li>
+            <li><a href="{% url 'order_list' %}">Cart new</a></li>
+{#            <li><a href="{% url 'cart' %}">Cart old</a></li>#}
         </ul>
 
         <ul class="sidebar-nav">
           {% if user.is_authenticated %}
             <li>User: {{ user.get_username }}</li>
-{#            <li><a href="{% url 'my-borrowed' %}">My Borrowed</a></li>#}
             <li><a href="{% url 'profile' %}">My profile</a></li>
             <li><a href="{% url 'logout' %}?next={{ request.path }}">Logout</a></li>
           {% else %}
@@ -67,9 +65,7 @@
           <hr/>
           <ul class="sidebar-nav">
           <li><a href="{% url 'home' %}">Home</a></li>
-{#            <li>Staff</li>#}
             {% if perms.catalog.can_mark_returned %}
-{#              <li><a href="{% url 'all-borrowed' %}">All borrowed</a></li>#}
             {% endif %}
           </ul>
         {% endif %}
@@ -77,8 +73,6 @@
       {% endblock %}
     </div>
     <div class="col-sm-10 ">
-{#    <div>{% block br_cr %}<a href="{% url 'index' %}">Home</a>{% endblock %}</div>#}
-{#    <div>{% block br_cr %}<a href="{% url 'home' %}">Home</a>{% endblock %}</div>#}
 
       {% block content %}{% endblock %}
 

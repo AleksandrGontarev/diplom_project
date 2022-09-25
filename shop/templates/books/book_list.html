@@ -8,12 +8,19 @@
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item"><a href="{% url 'book-detail' book.pk%}"> <p>{{ book.title }}</p></a></li>
-                        <li class="list-group-item">Author: {{ book.author.first_name}}</li>
+                        <li class="list-group-item">Author:
+                            {% for objs_author in book.author.all %}
+                                <p>{{ objs_author.first_name }}</p>
+                            {% endfor %}
+                        </li>
                         <li class="list-group-item">Price: {{ book.price }}</li>
+                        <li class="list-group-item">In stock: {{ book.quantity }}</li>
                     </ul>
+                <a href="{% url 'order_item_add' book.pk %}" class="btn btn-success" role="button">Add Order</a>
                 </div>
             </div>
         {% endfor %}
+
 
 
 

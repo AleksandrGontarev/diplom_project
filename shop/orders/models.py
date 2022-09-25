@@ -5,30 +5,34 @@ from django.urls import reverse
 
 
 class Order(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     ORDER_STATUS = (
-        ('c', 'Cart'),
-        ('o', 'Ordered'),
-        ('s', 'Success'),
-        ('f', 'Fail'),
+        ('cart', 'Cart'),
+        ('ordered', 'Ordered'),
+        ('success', 'Success'),
+        ('fail', 'Fail'),
     )
 
-    status = models.CharField(max_length=1, choices=ORDER_STATUS, blank=True, default='o', help_text='Order status')
-    delivery_address = models.CharField(max_length=255)
+    status = models.CharField(max_length=10, choices=ORDER_STATUS, blank=True, default='cart',
+                              help_text='choices order status: Cart or Ordered')
+    delivery_address = models.CharField(max_length=255, default='input address')
+
+    def __str__(self):
+        return str(self.pk)
+
+    # def get_absolute_url(self):
+    #     return reverse('order_list')
+
+
+class OrderItem(models.Model):
+    order_id = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, related_name='orders111')
+    book_id = models.ForeignKey(Book, on_delete=models.CASCADE, null=True, related_name='books111')
+    quantity = models.IntegerField()
 
     def __str__(self):
         return str(self.pk)
 
     def get_absolute_url(self):
-        return reverse('order-detail', args=[str(self.pk)])
-
-
-class OrderItem(models.Model):
-    order_id = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
-    book_id = models.ForeignKey(Book, on_delete=models.CASCADE, null=True)
-    quantity = models.IntegerField()
-
-    def __str__(self):
-        return str(self.pk)
+        return reverse('order_list')
 

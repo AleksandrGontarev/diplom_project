@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+{% block content %}
+  <div class="card" style="width: 30%;">
+      <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <h1>Add book to cart </h1>
+            <form action="" method="post">
+                {% csrf_token %}
+              {{ form.as_p }}
+                <input type="submit" value="Save" />
+            </form>
+{#            <p class="list-group-item"class="book">Book: {{ orderitem.book_id }}</p>#}
+{#              <p class="list-group-item"class="book">Order: {{ object.order_id }}</p>#}
+{#              <p class="list-group-item"class="book">Delivery: {{ order_id.delivery_address }}</p>#}
+          </ul>
+      </div>
+  </div>
+{% endblock %}
