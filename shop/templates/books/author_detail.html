@@ -2,6 +2,10 @@
 {% block content %}
     <p>author: {{ author.first_name }} {{ author.last_name }}</p>
     <p>date: {{ author.date_of_birth }} - {{ author.date_of_death }}</p>
-{#    <a href="{% url 'author-book' author.book.pk%}"> <p>post: {{ author.books }}</p></a>#}
+    {% for book in object_list %}
+        <li>
+            <a href="{% url 'book-detail' book.pk%}">{{ book.title }}</a>
+        </li>
+    {% endfor %}
 
 {% endblock %}

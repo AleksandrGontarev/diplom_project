@@ -1,5 +1,6 @@
 from books.models import Book, BookItem, Author
 from books.serializers import BookSerializer, BookItemSerializer, AuthorSerializer
+from django.db.models import Count
 from books.serializers import UserSerializer
 # from books.models import User
 # from books.permissions import IsOwnerOrReadOnly
@@ -15,7 +16,7 @@ class AuthorViewSet(viewsets.ModelViewSet):
 
 
 class BookViewSet(viewsets.ModelViewSet):
-    queryset = Book.objects.all()
+    queryset = Book.objects.annotate(books_count=Count('bookitem'))
     serializer_class = BookSerializer
     permission_classes = [permissions.IsAuthenticated]
                           # ,IsOwnerOrReadOnly]

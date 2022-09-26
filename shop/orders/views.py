@@ -1,8 +1,8 @@
-from django.views.generic import ListView, DetailView, CreateView, View
+from django.views.generic import ListView, DetailView, CreateView, View, UpdateView
 from orders.models import Order, OrderItem
-from django.shortcuts import render, redirect
+from books.models import Book
+from django.shortcuts import render, redirect, reverse
 from users.models import User
-from orders.forms import OrderItemFormSet
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, render
@@ -10,6 +10,7 @@ from django.urls import reverse_lazy
 from django import forms
 from django.http import HttpResponse
 from django.db import transaction
+from django.forms import inlineformset_factory
 
 
 class OrderListView(LoginRequiredMixin, ListView):
@@ -17,40 +18,19 @@ class OrderListView(LoginRequiredMixin, ListView):
     paginate_by = 10
     template_name = 'orders/order_list.html'
 
+    def get_queryset(self):
+        queryset = Order.objects.filter(user_id=self.request.user)
+        return queryset
+
 
 class OrderDetailView(LoginRequiredMixin, DetailView):
     model = Order
     template_name = 'orders/order_detail.html'
 
 
-class OrderOrderItemCreate(LoginRequiredMixin, CreateView):
-    model = Order
-    fields = ['delivery_address']
-    success_url = reverse_lazy('order_list')
-    template_name = 'orders/order_new.html'
-
-    def get_context_data(self, **kwargs):
-        data = super(OrderOrderItemCreate, self).get_context_data(**kwargs)
-        if self.request.POST:
-            data['orderitem'] = OrderItemFormSet(self.request.POST)
-        else:
-            data['orderitem'] = OrderItemFormSet()
-        return data
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        orderitem = context['orderitem']
-        with transaction.atomic():
-            self.object = form.save()
-
-            if orderitem.is_valid():
-                orderitem.instance = self.object
-                orderitem.save()
-        return super(OrderOrderItemCreate, self).form_valid(form)
-
-
 class OrderItemDetailView(LoginRequiredMixin, DetailView):
     model = OrderItem
+    template_name = 'orders/orderitem_detail.html'
 
 
 class OrderView(View):
@@ -64,22 +44,63 @@ class OrderView(View):
 
 class CartListView(ListView):
     model = OrderItem
-    paginate_by = 5
+    paginate_by = 2
     template_name = 'orders/cart.html'
 
     def get_queryset(self):
-        queryset = OrderItem.objects.select_related("book_id", "order_id")
+        queryset = OrderItem.objects.select_related("order_id").filter(order_id__user_id=self.request.user)
         return queryset
 
     def get_context_data(self, **kwargs):
-        user = Order.objects.select_related("user_id").get(id=1)
-        status = user.status
         context = super().get_context_data(**kwargs)
-
-        context["user"] = user
-        context["status"] = status
-
+        context["user"] = self.request.user
+        context["order"] = Order.objects.get(user_id=self.request.user)
         return context
+
+
+class OrderItemCreateView(LoginRequiredMixin, CreateView):
+    model = OrderItem
+    fields = ['quantity', 'book_id', 'order_id']
+    template_name = 'orders/order_item_add.html'
+
+    def get_initial(self, *args, **kwargs):
+        initial = super(OrderItemCreateView, self).get_initial()
+        initial['book_id'] = get_object_or_404(Book, pk=self.kwargs['pk'])
+        order, _ = Order.objects.get_or_create(user_id=self.request.user)
+        initial['order_id'] = order
+        return initial
+
+
+class OrderUpdate(LoginRequiredMixin, UpdateView):
+    model = Order
+    template_name = 'orders/orderupdate.html'
+    fields = ['delivery_address']
+
+    def get_success_url(self):
+        pk = self.kwargs["pk"]
+        return reverse("order_detail", kwargs={"pk": pk})
+
+
+class OrderItemUpdate(LoginRequiredMixin, UpdateView):
+    model = OrderItem
+    template_name = 'orders/order_ok.html'
+    fields = ['quantity']
+
+    def get_success_url(self):
+        pk = self.kwargs["pk"]
+        return reverse("orderitem_detail", kwargs={"pk": pk})
+
+
+class OrderConfirm(LoginRequiredMixin, UpdateView):
+    model = Order
+    template_name = 'orders/orderconfirm.html'
+    fields = ['status']
+
+
+
+
+
+
 
 
 

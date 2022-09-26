@@ -1,43 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1>All Orders: {{ object_list.count }}</h1>
-{#<ul>#}
-{#    {% for order in object_list %}#}
-{#        <li>#}
-{#            <a href="{% url 'order_detail' order.pk%}">#}
-{#                <p>{{ order.pk }} </p></a>#}
-{#                <p>{{ order.user_id }}</p>#}
-{#                <p>{{ order.user_id.email }}</p>#}
-{#                <p>{{ order.book_id.title}}</p>#}
-{#                <p>{{ order.order_id.pk}}</p>#}
-{#        </li>#}
-{#    {% endfor %}#}
-{#</ul>#}
 {% for order in object_list %}
- <div class="card" style="width: 35%;">
-
-                <div class="card-body">
+    <div class="card" style="width: 25rem;">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Order {{ order.pk }}</li>
-                        <li class="list-group-item">Book title: {{ orderitem.book_id}}</li>
-                        <li class="list-group-item">User: {{ order.user_id.username }}</li>
-                        <li class="list-group-item">Email: {{ order.user_id.email }}</li>
-                        <li class="list-group-item">Price: {{ order.book_id.price }}</li>
+                    <a href="{% url 'order_detail' order.pk%}" />order: {{ order.pk}}</a>
 
-                    <div class="input-group p-1">
-                        <span class="input-group-text" id="basic-addon1">Quantity: </span>
-                        <input type="text" class="form-control" placeholder={{orderitem.quantity}} aria-label="Quantity" aria-describedby="basic-addon1">
-                        <span class="input-group-text" id="basic-addon1">Total Price: </span>
-                        <input class="form-control" type="text" value="" aria-label="Disabled input example" disabled readonly>
-                    </div>
-                </div>
-            </div>
-            <br>
+                    </ul>
 
         {% endfor %}
 
-        <a href="{% url 'home' %}" class="btn btn-primary" role="button">Back</a>
-        <a href="#" class="btn btn-success" role="button">OK</a>
+        <a href="{% url 'book-list' %}" class="btn btn-success" role="button"/>Back</a>
 
-
+</div>
 {% endblock %}
