@@ -22,10 +22,11 @@ class AuthorSerializer(serializers.ModelSerializer):
 class BookSerializer(serializers.ModelSerializer):
 
     bookitem = serializers.HyperlinkedRelatedField(many=True, view_name='bookitem-detail', read_only=True)
+    count = serializers.IntegerField(source='books_count', read_only=True)
 
     class Meta:
         model = Book
-        fields = ['pk', 'title', 'id_store', 'price', 'author', 'bookitem']
+        fields = ['pk', 'title', 'id_store', 'price', 'author', 'bookitem', 'count']
 
 
 class BookItemSerializer(serializers.ModelSerializer):
