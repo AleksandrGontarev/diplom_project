@@ -1,16 +1,11 @@
 from django.views.generic import ListView, DetailView, CreateView, View, UpdateView
 from orders.models import Order, OrderItem
 from books.models import Book
-from django.shortcuts import render, redirect, reverse
-from users.models import User
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import reverse
+from books.tasks import send
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse_lazy
-from django import forms
-from django.http import HttpResponse
-from django.db import transaction
-from django.forms import inlineformset_factory
+from django.shortcuts import get_object_or_404
+
 
 
 class OrderListView(LoginRequiredMixin, ListView):
@@ -95,6 +90,31 @@ class OrderConfirm(LoginRequiredMixin, UpdateView):
     model = Order
     template_name = 'orders/orderconfirm.html'
     fields = ['status']
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        obj = self.get_object()
+        if obj.status == 'ordered':
+            email = self.request.user.email
+            text_reminder = "order create !"
+            self.object.save()
+            send(email=email, text_reminder=text_reminder)
+        return super(OrderConfirm, self).form_valid(form)
+
+    def get_success_url(self):
+        pk = self.kwargs["pk"]
+        return reverse("order_detail", kwargs={"pk": pk})
+
+        # result = super(OrderConfirm, self).form_valid(form)
+        # obj = self.get_object()
+        # user = self.request.user
+        # if obj.status == 'ordered':
+        #     mail = user.email
+        #     text_reminder = "order create !"
+        #     send(email=mail, text_reminder=text_reminder)
+        # obj.save()
+        # return result
+
 
 
 
