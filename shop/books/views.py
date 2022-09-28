@@ -38,8 +38,6 @@ class BookListview(ListView):
         order.order_items.add(orderItem)
 
 
-
-
 class BookDetailView(DetailView):
     model = Book
 
