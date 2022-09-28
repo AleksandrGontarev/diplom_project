@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'some value if your key is not in the 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost', 'shop', ]
 
 AUTH_USER_MODEL = "users.User"
 
@@ -151,10 +151,9 @@ if DEBUG:
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS += [ip[:-1] + '1' for ip in ips]
 
-
 # EMAIL BACKEND
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 EMAIL_HOST = "mailhog"
 EMAIL_PORT = "25"
@@ -167,10 +166,13 @@ CELERY_BROKER_URL = 'redis://redis:6379/0'
 CELERY_TIMEZONE = 'Europe/Kiev'
 CELERY_TASK_TRACK_STARTED = True
 CELERY_RESULT_BACKEND = "redis://redis:6379/0"
-CELERY_BEAT_SCHEDULE = {"hello": {
-    "task": "books.tasks.hello",
-    # "schedule": crontab(minute=0, hour="1-23/2"),
-    "schedule": crontab(minute="*/1"),
+CELERY_BEAT_SCHEDULE = {
+    "get_count": {
+        "task": "books.tasks.get_count",
+        # "schedule": crontab(minute=0, hour="1-23/2"),
+        "schedule": crontab(minute="*/1")},
+    "get_order": {
+        "task": "orders.tasks.get_order",
+        # "schedule": crontab(minute=0, hour="1-23/2"),
+        "schedule": crontab(minute="*/1")},
 }
-}
-

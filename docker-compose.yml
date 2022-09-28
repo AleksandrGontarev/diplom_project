@@ -50,6 +50,8 @@ services:
       - rabbitmq
       - redis
       - db_warehouse
+    expose:
+      - 8000
     environment:
       DB_NAME: "shop"
       DB_USER: "postgres"
@@ -102,6 +104,7 @@ services:
       - db_shop_volume:/var/lib/postgresql/data
     networks:
       - shop_db_network
+      - celery_sklad
     expose:
       - 5432
     restart: on-failure
