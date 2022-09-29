@@ -21,9 +21,6 @@ class BookViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated,
                           IsOwnerOrReadOnly]
 
-    # def perform_create(self, serializer):
-    #     serializer.save(author=self.request.user)
-
 
 class BookItemViewSet(viewsets.ModelViewSet):
     queryset = BookItem.objects.all()
@@ -31,11 +28,4 @@ class BookItemViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated,
                           IsOwnerOrReadOnly]
 
-    # def perform_create(self, serializer):
-    #     serializer.save(author=self.request.user)
 
-
-# class UserViewSet(viewsets.ReadOnlyModelViewSet):
-#
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
