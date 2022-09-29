@@ -21,7 +21,7 @@ class Genre(models.Model):
 
 class Book(models.Model):
     title = models.CharField("title", max_length=255)
-    author = models.ManyToManyField(Author, null=True, blank=True)
+    author = models.ManyToManyField(Author, blank=True)
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE, null=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     quantity = models.IntegerField()                                              # WAREHOUSE

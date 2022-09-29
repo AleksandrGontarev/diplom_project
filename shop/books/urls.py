@@ -1,6 +1,6 @@
 from django.urls import path, include
 from books import views
-from django.views.decorators.cache import cache_page
+# from django.views.decorators.cache import cache_page
 
 urlpatterns = [
     path('books/', views.BookListview.as_view(), name='book-list'),

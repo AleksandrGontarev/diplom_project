@@ -105,15 +105,6 @@ class OrderConfirm(LoginRequiredMixin, UpdateView):
         pk = self.kwargs["pk"]
         return reverse("order_detail", kwargs={"pk": pk})
 
-        # result = super(OrderConfirm, self).form_valid(form)
-        # obj = self.get_object()
-        # user = self.request.user
-        # if obj.status == 'ordered':
-        #     mail = user.email
-        #     text_reminder = "order create !"
-        #     send(email=mail, text_reminder=text_reminder)
-        # obj.save()
-        # return result
 
 
 

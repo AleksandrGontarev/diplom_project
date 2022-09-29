@@ -66,6 +66,41 @@ services:
       timeout: 5s
       retries: 2
 
+
+#  warehouse_celery:
+#    container_name: warehouse_celery
+#    build:
+#      context: .
+#      dockerfile: ./docker/warehouse/Dockerfile
+#    volumes:
+#      - ./warehouse:/app
+#    networks:
+#      - shop_db_network
+#      - celery_sklad
+#      - warehouse_db_network
+#    env_file:
+#      - docker/warehouse/.env
+#    depends_on:
+#      - db_shop
+#      - rabbitmq
+#      - redis
+#      - db_warehouse
+#    expose:
+#      - 8000
+#    environment:
+#      DB_NAME: "warehouse"
+#      DB_USER: "postgres"
+#      DB_PASSWORD: "postgres"
+#      DB_HOST: "db_warehouse"
+#      DB_PORT: "5432"
+#    restart: on-failure
+#    command: celery -A core worker -B -l INFO
+#    healthcheck:
+#      test: [ "CMD", "curl", "--fail", "http://0.0.0.0:8000/admin/login/" ]
+#      interval: 1m
+#      timeout: 5s
+#      retries: 2
+
   warehouse:
     container_name: warehouse
     build:
