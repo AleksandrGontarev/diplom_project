@@ -12,7 +12,7 @@ class AuthorsListView(ListView):
     paginate_by = 10
     template_name = 'books/author_list.html'
     ordering = ['first_name']
-    # queryset = Author.objects.prefetch_related('book_set')
+    queryset = Author.objects.prefetch_related('book_set')
 
 
 class AuthorDetailView(DetailView):
@@ -29,6 +29,7 @@ class BookListview(ListView):
     paginate_by = 10
     template_name = 'books/book_list.html'
     ordering = ['title']
+    queryset = Book.objects.select_related('genre').prefetch_related('author')
 
     def post(self, request, *args, **kwargs):
         pk = request.POST.get('pk')

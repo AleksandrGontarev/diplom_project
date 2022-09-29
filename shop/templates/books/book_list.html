@@ -10,7 +10,7 @@
                         <li class="list-group-item"><a href="{% url 'book-detail' book.pk%}"> <p>{{ book.title }}</p></a></li>
                         <li class="list-group-item">Author:
                             {% for objs_author in book.author.all %}
-                                <p>{{ objs_author.first_name }}</p>
+                                <p>{{ objs_author.first_name }} {{ objs_author.last_name }}</p>
                             {% endfor %}
                         </li>
                         <li class="list-group-item">Price: {{ book.price }}</li>
