@@ -170,9 +170,9 @@ CELERY_BEAT_SCHEDULE = {
     "get_count": {
         "task": "books.tasks.get_count",
         # "schedule": crontab(minute=0, hour="1-23/2"),
-        "schedule": crontab(minute="*/1")},
-    "get_order": {
-        "task": "orders.tasks.get_order",
-        # "schedule": crontab(minute=0, hour="1-23/2"),
-        "schedule": crontab(minute="*/1")},
+        "schedule": crontab(minute="*/1")}
+    # "get_order": {
+    #     "task": "orders.tasks.get_order",
+    #     # "schedule": crontab(minute=0, hour="1-23/2"),
+    #     "schedule": crontab(minute="*/1")},
 }
