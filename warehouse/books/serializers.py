@@ -30,7 +30,8 @@ class BookSerializer(serializers.ModelSerializer):
 
 
 class BookItemSerializer(serializers.ModelSerializer):
+    book_item_id = serializers.HyperlinkedRelatedField(many=True, view_name='bookitem-detail', read_only=True)
 
     class Meta:
         model = BookItem
-        fields = ['pk', 'isbn', 'book_id', 'row', 'shelf', 'history']
+        fields = "__all__"

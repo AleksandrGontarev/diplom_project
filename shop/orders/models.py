@@ -30,6 +30,7 @@ class OrderItem(models.Model):
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE, null=True, related_name='books111')
     quantity = models.IntegerField()
 
+
     def __str__(self):
         return str(self.pk)
 

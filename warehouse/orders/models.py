@@ -1,5 +1,5 @@
 from django.db import models
-from books.models import BookItem
+from books.models import BookItem, Book
 import uuid
 
 
@@ -21,10 +21,8 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    order_id = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, related_name='order_id')
-    book_store_id = models.UUIDField(default=uuid.uuid4, primary_key=True,
-                                     help_text="The unique identifier for this particular book in the warehouse and "
-                                               "shop")
+    order_id = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order')
+    book_id = models.ForeignKey(Book, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     book_item_id = models.ManyToManyField(BookItem)
 

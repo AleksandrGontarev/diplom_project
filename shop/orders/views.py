@@ -98,10 +98,10 @@ class OrderConfirm(LoginRequiredMixin, UpdateView):
             email = self.request.user.email
             text_reminder = obj.status
             send(email=email, text_reminder=text_reminder)
-            # get_order()
+            get_order()
         self.object.save()
         get_order()
-        get_order1()
+        # get_order1()
         return super(OrderConfirm, self).form_valid(form)
 
     def get_success_url(self):

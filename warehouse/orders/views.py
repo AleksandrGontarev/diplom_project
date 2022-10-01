@@ -9,14 +9,15 @@ from rest_framework.response import Response
 from rest_framework import permissions
 
 
-class OrderItemViewSet(viewsets.ModelViewSet):
-    queryset = OrderItem.objects.all()
-    serializer_class = OrderItemSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
 class OrderViewSet(viewsets.ModelViewSet):
+    # queryset = Book.objects.annotate(books_count=Count('bookitem'))
+
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+
+class OrderItemViewSet(viewsets.ModelViewSet):
+    queryset = OrderItem.objects.all()
+    serializer_class = OrderItemSerializer
+    permission_classes = [permissions.IsAuthenticated]
