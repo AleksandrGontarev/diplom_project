@@ -15,14 +15,15 @@ class Order(models.Model):
     )
 
     status = models.CharField(max_length=10, choices=ORDER_STATUS, blank=True, default='cart',
-                              help_text='choices order status: Cart or Ordered')
+                              help_text='If you confirm, choose ordered')
     delivery_address = models.CharField(max_length=255, default='input address')
 
     def __str__(self):
         return str(self.pk)
 
-    # def get_absolute_url(self):
-    #     return reverse('order_list')
+
+def get_absolute_url():
+    return reverse('order_list')
 
 
 class OrderItem(models.Model):

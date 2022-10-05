@@ -152,8 +152,8 @@ if DEBUG:
     INTERNAL_IPS += [ip[:-1] + '1' for ip in ips]
 
 # EMAIL BACKEND
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 EMAIL_HOST = "mailhog"
 EMAIL_PORT = "25"
@@ -170,9 +170,9 @@ CELERY_BEAT_SCHEDULE = {
     "get_count": {
         "task": "books.tasks.get_count",
         # "schedule": crontab(minute=0, hour="1-23/2"),
-        "schedule": crontab(minute="*/1")},
-    "get_order": {
-        "task": "orders.tasks.get_order",
-        # "schedule": crontab(minute=0, hour="1-23/2"),
-        "schedule": crontab(minute="*/1")},
+        "schedule": crontab(minute="*/1")}
+    # "get_order": {
+    #     "task": "orders.tasks.get_order",
+    #     # "schedule": crontab(minute=0, hour="1-23/2"),
+    #     "schedule": crontab(minute="*/1")},
 }

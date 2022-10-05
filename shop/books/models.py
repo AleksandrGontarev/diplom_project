@@ -1,6 +1,6 @@
 from django.db import models
 import uuid
-from django.urls import reverse
+
 
 class Author(models.Model):
     first_name = models.CharField(max_length=100)
@@ -30,6 +30,3 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
-
-
-

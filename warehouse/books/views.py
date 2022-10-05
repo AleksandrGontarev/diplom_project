@@ -1,9 +1,6 @@
 from books.models import Book, BookItem, Author
 from books.serializers import BookSerializer, BookItemSerializer, AuthorSerializer
 from django.db.models import Count
-from books.serializers import UserSerializer
-# from books.models import User
-from books.permissions import IsOwnerOrReadOnly
 from rest_framework import viewsets
 
 from rest_framework import permissions
@@ -18,14 +15,12 @@ class AuthorViewSet(viewsets.ModelViewSet):
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.annotate(books_count=Count('bookitem'))
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated,
-                          IsOwnerOrReadOnly]
+    # permission_classes = [permissions.IsAuthenticated,
+    #                       IsOwnerOrReadOnly]
 
 
 class BookItemViewSet(viewsets.ModelViewSet):
     queryset = BookItem.objects.all()
     serializer_class = BookItemSerializer
-    permission_classes = [permissions.IsAuthenticated,
-                          IsOwnerOrReadOnly]
-
-
+    # permission_classes = [permissions.IsAuthenticated,
+    #                       IsOwnerOrReadOnly]

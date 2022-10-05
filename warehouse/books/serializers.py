@@ -33,4 +33,4 @@ class BookItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BookItem
-        fields = ['pk', 'isbn', 'book_id', 'row', 'shelf', 'history']
+        fields = "__all__"

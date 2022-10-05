@@ -1,6 +1,5 @@
 from django.db import models
-from books.models import BookItem
-import uuid
+from books.models import BookItem, Book
 
 
 class Order(models.Model):
@@ -14,17 +13,15 @@ class Order(models.Model):
 
     status = models.CharField(max_length=1, choices=ORDER_STATUS, blank=True, default='i', help_text='Order status')
     delivery_address = models.CharField(max_length=255, help_text='delivery address')
-    order_id_in_shop = models.IntegerField()
+    order_id_in_shop = models.IntegerField(null=True, unique=True)
 
     def __str__(self):
         return str(self.pk)
 
 
 class OrderItem(models.Model):
-    order_id = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, related_name='order_id')
-    book_store_id = models.UUIDField(default=uuid.uuid4, primary_key=True,
-                                     help_text="The unique identifier for this particular book in the warehouse and "
-                                               "shop")
+    order_id = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='orderitem')
+    book_id = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='book')
     quantity = models.IntegerField()
     book_item_id = models.ManyToManyField(BookItem)
 

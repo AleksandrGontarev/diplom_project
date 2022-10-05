@@ -7,7 +7,6 @@ urlpatterns = [
     path('cart/<int:pk>/order_ok/', OrderItemUpdate.as_view(), name='order_ok'),
     path('cart/<int:pk>/orderupdate/', OrderUpdate.as_view(), name='orderupdate'),
     path('cart/<int:pk>/orderconfirm/', OrderConfirm.as_view(), name='orderconfirm'),
-    # path('cart/<int:pk>/orderinline/', OrderInline.as_view(), name='order_inline'),
 
     path('order/<int:pk>/', OrderDetailView.as_view(), name='order_detail'),
     path('order/', OrderListView.as_view(), name='order_list'),

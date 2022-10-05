@@ -1,9 +1,7 @@
 from django.views.generic import ListView, DetailView
-from books.models import Author, Genre, Book
+from books.models import Author, Book
 from orders.models import Order, OrderItem
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from orders.forms import OrderItemForm
 
 
@@ -47,10 +45,3 @@ class BookDetailView(DetailView):
         context = super(BookDetailView, self).get_context_data()
         context["cart_product_form"] = cart_product_form
         return context
-
-
-
-
-
-
-

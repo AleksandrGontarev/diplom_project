@@ -5,8 +5,6 @@ from django.core.mail import send_mail
 import requests
 from books.models import Book, Author
 
-import json
-
 
 @shared_task
 def send(email, text_reminder):
