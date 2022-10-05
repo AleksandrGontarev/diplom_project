@@ -152,8 +152,8 @@ if DEBUG:
     INTERNAL_IPS += [ip[:-1] + '1' for ip in ips]
 
 # EMAIL BACKEND
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 EMAIL_HOST = "mailhog"
 EMAIL_PORT = "25"

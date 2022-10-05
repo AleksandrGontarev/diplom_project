@@ -3,7 +3,7 @@ from orders.models import Order, OrderItem
 from books.models import Book
 from django.shortcuts import reverse
 from books.tasks import send
-from orders.tasks import get_order, get_order1
+from orders.tasks import get_order
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 
@@ -94,28 +94,15 @@ class OrderConfirm(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         obj = self.get_object()
-        if obj.status == 'ordered':
-            email = self.request.user.email
-            text_reminder = obj.status
-            send(email=email, text_reminder=text_reminder)
-            get_order()
-        self.object.save()
-        get_order()
-        # get_order1()
+        email = self.request.user.email
+        obj.status = 'ordered'
+        text_reminder = f'{obj.status} {self.object}'
+        send(email=email, text_reminder=text_reminder)
+        get_order(obj, email)
+
+        obj.save()
         return super(OrderConfirm, self).form_valid(form)
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
         return reverse("order_detail", kwargs={"pk": pk})
-
-
-
-
-
-
-
-
-
-
-
-

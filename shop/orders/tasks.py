@@ -2,9 +2,8 @@ import os
 from celery import shared_task
 from django.core.mail import send_mail
 import requests
-import json
-from orders.models import Order, OrderItem
-from django.core import serializers
+from orders.models import Order
+from orders.models import OrderItem
 
 
 @shared_task
@@ -20,65 +19,45 @@ def send(email, text_reminder):
 
 
 @shared_task
-def get_order():
+def get_order(obj, email):
     token = os.environ.get('TOKEN_SECRET')
     headers = {'Authorization': 'Token {}'.format(token)}
-    orders_all = Order.objects.filter(status='ordered')
-    for order in orders_all:
-        user = order.user_id.email
-        order_item_all = OrderItem.objects.filter(order_id=order.pk)
-        order_list = []
-        for j in order_item_all:
-            order_item = {
-                "quantity": j.quantity,
-                "order_id": j.order_id,
-                "book_id": j.book_id,
-            }
-            order_list.append(order_item)
-        request_obj = {
-            "delivery_address": order.delivery_address,
-            "status": "i",
-            "user_email": user,
-            "order_id_in_shop": order.pk,
-            "orderitem": [],
-        }
+    order = Order.objects.get(pk=obj.pk)
+    user_email = email
+    request_obj = {
+        "delivery_address": order.delivery_address,
+        "status": "i",
+        "user_email": user_email,
+        "order_id_in_shop": order.pk,
+    }
+    try:
+        url = "http://warehouse:8000/api/orders/"
+        token = os.environ.get('TOKEN_SECRET')
+        headers = {'Authorization': 'Token {}'.format(token)}
+        response = requests.post(url=url, json=request_obj, headers=headers)
+        print("Status Code", response.status_code)
+        print("JSON Response ", response.json())
+    except Exception as e:
+        print(e)
 
+    response1 = requests.get(url=url, headers=headers)
+    order_item_all = OrderItem.objects.filter(order_id=obj.pk)
+    for order_warehouse in response1.json()['results']:
+        if order_warehouse['order_id_in_shop'] == obj.pk:
+            for order_shop in order_item_all:
+                order_items = {
 
-        try:
-            url = "http://warehouse:8000/api/orders/"
-            token = os.environ.get('TOKEN_SECRET')
-            headers = {'Authorization': 'Token {}'.format(token)}
-            check = requests.get(url, headers=headers)
-            parsed = check.json()
-            if parsed["results"]:
-                for j in parsed['results']:
-                    if j["order_id_in_shop"] != order.pk:
-                        response = requests.post(url=url, json=request_obj, headers=headers)
-                        print("Status Code", response.status_code)
-                        print("JSON Response ", response.json())
-                        get_order1()
-            else:
-                response = requests.post(url=url, json=request_obj, headers=headers)
-        except Exception as e:
-            print(e)
-
-
-@shared_task
-def get_order1():
-    token = os.environ.get('TOKEN_SECRET')
-    headers = {'Authorization': 'Token {}'.format(token)}
-    order_item_all = OrderItem.objects.all()
-    for item in order_item_all:
-        order_item_all = {
-            "quantity": item.quantity,
-            "order_id": item.order_id.pk,
-            "book_id": str(item.book_id.id_in_store),
-        }
-
-        try:
-            url1 = "http://warehouse:8000/api/orderitems/"
-            # response1 = requests.post(url=url1, json=order_item_all, headers=headers)
-            # print("Status Code", response1.status_code)
-            # print("JSON Response ", response1.json())
-        except Exception as e:
-            print(e)
+                    "quantity": order_shop.quantity,
+                    "book_id": str(order_shop.book_id.pk),
+                    "order_id": order_warehouse['pk'],
+                    "book_item_id": [1]
+                }
+                try:
+                    headers = {'Authorization': 'Token {}'.format(token)}
+                    response2 = requests.post(url="http://warehouse:8000/api/orderitems/",
+                                              json=order_items,
+                                              headers=headers)
+                    print("Status Code", response2.status_code)
+                    print("JSON Response ", response2.json())
+                except Exception as e:
+                    print(e)
